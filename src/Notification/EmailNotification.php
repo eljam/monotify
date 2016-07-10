@@ -1,17 +1,35 @@
 <?php
 
+/*
+ * This file is part of the monotify package
+ *
+ * Copyright (c) 2016 Guillaume Cavana
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
+ * @author Guillaume Cavana <guillaume.cavana@gmail.com>
+ */
+
 namespace Monotify\Notification;
 
-use Monotify\Notification\NotificationInterface;
-use Monotify\Notification\Type;
-
-class EmailNotification implements NotificationInterface
+class EmailNotification implements EmailNotificationInterface
 {
     protected $message;
     protected $subject;
     protected $from;
     protected $recipientAddresses;
 
+    /**
+     * Constructor.
+     *
+     * @param string $message
+     * @param string $from
+     * @param string $subject
+     * @param array  $recipientAddresses
+     */
     public function __construct($message, $from, $subject, array $recipientAddresses)
     {
         $this->message = $message;
@@ -21,8 +39,7 @@ class EmailNotification implements NotificationInterface
     }
 
     /**
-     * getRecipientAddresses
-     * @return array All recipient email addresses
+     * {@inheritdoc}
      */
     public function getRecipientAddresses()
     {
@@ -30,8 +47,7 @@ class EmailNotification implements NotificationInterface
     }
 
     /**
-     * getFrom
-     * @return string From address
+     * {@inheritdoc}
      */
     public function getFrom()
     {
@@ -39,19 +55,16 @@ class EmailNotification implements NotificationInterface
     }
 
     /**
-     * getSubject
-     * @return string Email subject
+     * {@inheritdoc}
      */
     public function getSubject()
     {
         return $this->subject;
     }
 
-    public function getType()
-    {
-        return Type::EMAIL;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function getMessage()
     {
         return $this->message;

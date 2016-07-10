@@ -15,30 +15,26 @@
 
 namespace Monotify\Notification;
 
-/**
- * Notifcation object.
- */
-class Notification implements NotificationInterface
+interface EmailNotificationInterface extends NotificationInterface
 {
-    protected $message;
+    /**
+     * getRecipientAddresses.
+     *
+     * @return array All recipient email addresses
+     */
+    public function getRecipientAddresses();
 
     /**
-     * Constructor.
+     * getFrom.
      *
-     * @param string $message
+     * @return string From address
      */
-    public function __construct($message)
-    {
-        $this->message = $message;
-    }
+    public function getFrom();
 
     /**
-     * getMessage.
+     * getSubject.
      *
-     * @return string
+     * @return string Email subject
      */
-    public function getMessage()
-    {
-        return $this->message;
-    }
+    public function getSubject();
 }
