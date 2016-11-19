@@ -15,6 +15,7 @@
 
 namespace Monotify\Handler;
 
+use Monotify\Exceptions\MonotifyException;
 use Monotify\Notification\EmailNotificationInterface;
 use Monotify\Notification\NotificationInterface;
 
@@ -23,6 +24,7 @@ class SwiftMailerHandler implements HandlerInterface
     protected $mailer;
 
     /**
+     * Constructor.
      * @param \Swift_Mailer $mailer
      */
     public function __construct(\Swift_Mailer $mailer)
@@ -40,6 +42,7 @@ class SwiftMailerHandler implements HandlerInterface
 
     /**
      * {@inheritdoc}
+     * @throws MonotifyException
      */
     public function handle(NotificationInterface $notification)
     {
@@ -49,6 +52,10 @@ class SwiftMailerHandler implements HandlerInterface
             ->setTo($notification->getRecipientAddresses())
             ->setBody($notification->getMessage());
 
-        $this->mailer->send($message);
+        try {
+            $this->mailer->send($message);
+        } catch (\Swift_TransportException $e) {
+            throw new MonotifyException($e);
+        }
     }
 }

@@ -19,7 +19,9 @@
         "mmoreram/php-formatter": "^1.1",
         "swiftmailer/swiftmailer": "^5.4",
         "ruflin/elastica": ">=0.90 <3.0",
-        "symfony/process": "~2.3|~3.0"
+        "symfony/process": "~2.3|~3.0",
+        "hipchat/hipchat-php": "1.2.*",
+        "lygav/php-slackbot": "^0.0.3"
     },
     "autoload" : {
         "psr-4" : {
@@ -36,6 +38,13 @@
     },
     "suggest": {
         "swiftmailer/swiftmailer": "Send email notification",
-        "ruflin/elastica": "Send notification to elasticsearch"
+        "ruflin/elastica": "Send notification to elasticsearch",
+        "hipchat/hipchat-php": "Send notification to hipchat",
+        "lygav/php-slackbot": "Send notification to slack"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }
