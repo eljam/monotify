@@ -37,7 +37,10 @@ class SwiftMailerHandler implements HandlerInterface
      */
     public function canHandle(NotificationInterface $notification)
     {
-        return $notification instanceof EmailNotificationInterface;
+        if (($notification instanceof EmailNotificationInterface) && method_exists($notification, 'getRecipientAddresses') ) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -15,6 +15,7 @@
 
 namespace Monotify;
 
+use Monotify\Exceptions\MonotifyException;
 use Monotify\Handler\HandlerInterface;
 use Monotify\Notification\NotificationInterface;
 
@@ -92,13 +93,13 @@ class Notifier
      * notify.
      *
      * @param NotificationInterface $notification
-     *
      * @return bool
+     * @throws MonotifyException
      */
     public function notify(NotificationInterface $notification)
     {
         if (!$this->handlers) {
-            throw new \RuntimeException('You need at least one handler');
+            throw new MonotifyException('You need at least one handler');
         }
 
         $handlerKey = null;

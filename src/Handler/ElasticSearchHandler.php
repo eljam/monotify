@@ -18,6 +18,7 @@ namespace Monotify\Handler;
 use Elastica\Client;
 use Elastica\Document;
 use Elastica\Exception\ExceptionInterface;
+use Monotify\Exceptions\MonotifyException;
 use Monotify\Notification\NotificationInterface;
 
 /**
@@ -50,7 +51,7 @@ class ElasticSearchHandler implements HandlerInterface
             [
                 'index' => 'notification',      // Elastic index name
                 'type' => 'notification',       // Elastic document type
-                'ignore_error' => false,          // Suppress Elastica exceptions
+                'ignore_error' => false,        // Suppress Elastica exceptions
             ],
             $options
         );
@@ -73,7 +74,7 @@ class ElasticSearchHandler implements HandlerInterface
             $this->client->addDocuments($this->getDocument($notification));
         } catch (ExceptionInterface $e) {
             if (!$this->options['ignore_error']) {
-                throw new \RuntimeException('Error sending messages to Elasticsearch', 0, $e);
+                throw new MonotifyException('Error sending messages to Elasticsearch', 0, $e);
             }
         }
     }

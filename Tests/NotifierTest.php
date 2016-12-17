@@ -51,10 +51,8 @@ class NotifierTest extends \PHPUnit_Framework_TestCase
         $notificationMock = $this->prophesize('Monotify\Notification\EmailNotification');
         $notificationMock->willBeConstructedWith(['message', ['From' => 'from@mail.org'], 'subject', ['Email' => 'to@mail.org']]);
 
-        return $notificationMock;
-
         $notifier = new Notifier('mail-notifier');
-        $this->setExpectedException('RuntimeException');
+        $this->setExpectedException('\Monotify\Exceptions\MonotifyException');
 
         $notifier->notify($notificationMock->reveal());
     }

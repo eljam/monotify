@@ -17,5 +17,8 @@ namespace Monotify\Notification;
 
 interface NotificationInterface
 {
+    /**
+     * @return mixed
+     */
     public function getMessage();
 }
