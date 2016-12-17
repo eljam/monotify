@@ -16,7 +16,9 @@
 namespace Monotify\Handler;
 
 use Elastica\Client;
+use Elastica\Document;
 use Elastica\Exception\ExceptionInterface;
+use Monotify\Notification\NotificationInterface;
 
 /**
  * Thx to monolog for this class.
