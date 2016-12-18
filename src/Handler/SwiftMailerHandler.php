@@ -21,15 +21,39 @@ use Monotify\Notification\NotificationInterface;
 
 class SwiftMailerHandler implements HandlerInterface
 {
+    /**
+     * @var \Swift_Mailer
+     */
     protected $mailer;
 
     /**
-     * Constructor.
-     * @param \Swift_Mailer $mailer
+     * @var string
      */
-    public function __construct(\Swift_Mailer $mailer)
+    protected $subject;
+
+    /**
+     * @var string
+     */
+    protected $from;
+
+    /**
+     * @var array
+     */
+    protected $recipientAddresses;
+
+    /**
+     * SwiftMailerHandler constructor.
+     * @param \Swift_Mailer $mailer
+     * @param $subject
+     * @param array $from
+     * @param array $recipientAddresses
+     */
+    public function __construct(\Swift_Mailer $mailer, $subject, array $from, array $recipientAddresses)
     {
         $this->mailer = $mailer;
+        $this->subject = $subject;
+        $this->from = $from;
+        $this->recipientAddresses = $recipientAddresses;
     }
 
     /**
@@ -37,10 +61,7 @@ class SwiftMailerHandler implements HandlerInterface
      */
     public function canHandle(NotificationInterface $notification)
     {
-        if (($notification instanceof EmailNotificationInterface) && method_exists($notification, 'getRecipientAddresses') ) {
-            return true;
-        }
-        return false;
+        return $notification instanceof NotificationInterface;
     }
 
     /**
@@ -49,15 +70,15 @@ class SwiftMailerHandler implements HandlerInterface
      */
     public function handle(NotificationInterface $notification)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($notification->getSubject())
-            ->setFrom($notification->getFrom())
-            ->setTo($notification->getRecipientAddresses())
-            ->setBody($notification->getMessage());
-
         try {
+            $message = \Swift_Message::newInstance()
+                ->setSubject($this->subject)
+                ->setFrom($this->from)
+                ->setTo($this->recipientAddresses)
+                ->setBody($notification->getMessage());
+
             $this->mailer->send($message);
-        } catch (\Swift_TransportException $e) {
+        } catch (\Swift_SwiftException $e) {
             throw new MonotifyException($e);
         }
     }

@@ -16,7 +16,7 @@
 namespace Monotify\Tests;
 
 use Monotify\Handler\SwiftMailerHandler;
-use Monotify\Notification\EmailNotification;
+use Monotify\Notification\Notification;
 use Monotify\Notifier;
 
 class NotifierTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +27,7 @@ class NotifierTest extends \PHPUnit_Framework_TestCase
         $swiftMailer = \Swift_Mailer::newInstance($transport);
 
         $notifier = new Notifier('mail-notifier');
-        $notifier->addHandler((new SwiftMailerHandler($swiftMailer)));
+        $notifier->addHandler((new SwiftMailerHandler($swiftMailer, 'Subject', ['from@mail.org' => 'From'], ['to@mail.org' => 'Email'])));
 
         $this->assertCount(1, $notifier->getHandlers());
     }
@@ -38,9 +38,9 @@ class NotifierTest extends \PHPUnit_Framework_TestCase
         $swiftMailer = \Swift_Mailer::newInstance($transport);
 
         $notifier = new Notifier('mail-notifier');
-        $notifier->addHandler((new SwiftMailerHandler($swiftMailer)));
+        $notifier->addHandler((new SwiftMailerHandler($swiftMailer, 'Subject', ['from@mail.org' => 'From'], ['to@mail.org' => 'Email'])));
 
-        $this->assertTrue($notifier->notify($this->createEmailNotification()));
+        $this->assertTrue($notifier->notify($this->createNotification()));
     }
 
     public function testNotifyException()
@@ -48,8 +48,8 @@ class NotifierTest extends \PHPUnit_Framework_TestCase
         $transport = \Swift_NullTransport::newInstance();
         $swiftMailer = \Swift_Mailer::newInstance($transport);
 
-        $notificationMock = $this->prophesize('Monotify\Notification\EmailNotification');
-        $notificationMock->willBeConstructedWith(['message', ['From' => 'from@mail.org'], 'subject', ['Email' => 'to@mail.org']]);
+        $notificationMock = $this->prophesize('Monotify\Notification\Notification');
+        $notificationMock->willBeConstructedWith(['message']);
 
         $notifier = new Notifier('mail-notifier');
         $this->setExpectedException('\Monotify\Exceptions\MonotifyException');
@@ -57,8 +57,8 @@ class NotifierTest extends \PHPUnit_Framework_TestCase
         $notifier->notify($notificationMock->reveal());
     }
 
-    private function createEmailNotification()
+    private function createNotification()
     {
-        return new EmailNotification('message', ['from@mail.org' => 'From'], 'subject', ['to@mail.org' => 'To']);
+        return new Notification('message');
     }
 }
